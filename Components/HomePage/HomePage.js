@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import UserDashboard from "../UserDashboard/UserDashboard";
 
 const HomePage = ({ navigation }) => {
   

@@ -1,9 +1,9 @@
-import React from 'react'
+import React, {createContext, useState} from 'react';
 import 'react-native-gesture-handler';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StyleSheet } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {StyleSheet} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import HomePage from './Components/HomePage/HomePage';
 import LoginPage from './Components/LoginPage/LoginPage';
 import UserDashboard from './Components/UserDashboard/UserDashboard';
@@ -21,31 +21,36 @@ import ManageBoarder from './Components/AdminDashBoard/ManageBoarder/ManageBoard
 
 const screenStack = createStackNavigator();
 
+export const userContext = createContext();
+
 const App = () => {
+  const [loggedUser, setLoggedUser] = useState({});
   return (
-    <SafeAreaProvider>
-    <NavigationContainer>
-    <screenStack.Navigator initialRouteName="Home">
-      <screenStack.Screen name="Home" component={HomePage} />
-      <screenStack.Screen name="Login" component={LoginPage} />
-      <screenStack.Screen name="SignUp" component={SignUp} />
-      <screenStack.Screen name="User" component={UserDashboard} />
-      <screenStack.Screen name="UserMeal" component={UserMealStatus} />
+    <userContext.Provider value={[loggedUser, setLoggedUser]}>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <screenStack.Navigator initialRouteName="Home">
+            <screenStack.Screen name="Home" component={HomePage} />
+            <screenStack.Screen name="Login" component={LoginPage} />
+            <screenStack.Screen name="SignUp" component={SignUp} />
+            <screenStack.Screen name="User" component={UserDashboard} />
+            {/* <screenStack.Screen name="UserMeal" component={UserMealStatus} />
       <screenStack.Screen name="UserRent" component={UserRentStatus} />
       <screenStack.Screen name="UserProfile" component={UserProfile} />
-      <screenStack.Screen name="UserGuest" component={UserGuest} />
-      <screenStack.Screen name="Admin" component={AdminDashBoard} />
-      <screenStack.Screen name="Search" component={SearchResult} />
-      <screenStack.Screen name="MMeal" component={ManageMeal} />
-      <screenStack.Screen name="MRent" component={ManageRent} />
-      <screenStack.Screen name="MRoom" component={ManageRoom} />
-      <screenStack.Screen name="MBoarder" component={ManageBoarder} />
-    </screenStack.Navigator>
-  </NavigationContainer>
-  </SafeAreaProvider>
-  )
-}
+      <screenStack.Screen name="UserGuest" component={UserGuest} /> */}
+            <screenStack.Screen name="Admin" component={AdminDashBoard} />
+            <screenStack.Screen name="Search" component={SearchResult} />
+            <screenStack.Screen name="MMeal" component={ManageMeal} />
+            <screenStack.Screen name="MRent" component={ManageRent} />
+            <screenStack.Screen name="MRoom" component={ManageRoom} />
+            <screenStack.Screen name="MBoarder" component={ManageBoarder} />
+          </screenStack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </userContext.Provider>
+  );
+};
 
-export default App
+export default App;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

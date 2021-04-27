@@ -1,12 +1,10 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import AdminBottomTabs from './AdminBottomTabs/AdminBottomTabs';
 
 const AdminDashBoard = () => {
     return (
-        <View>
-            <Text>this is admin page</Text>
-            
-        </View>
+        <AdminBottomTabs />
     );
 };
 

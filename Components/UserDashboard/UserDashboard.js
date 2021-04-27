@@ -1,22 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import UserBottomTabs from '../UserDashboard/UserBottomTabs/UserBottomTabs'
 
 const UserDashboard = ({navigation}) => {
   return (
-    <View style={styles.container}>
-      <View style={{margin: 10}}>
-        <Text onPress={() => navigation.navigate('UserProfile')}>Profile</Text>
-      </View>
-      <View style={{margin: 10}}>
-        <Text onPress={() => navigation.navigate('UserRent')}>Rent</Text>
-      </View>
-      <View style={{margin: 10}}>
-        <Text onPress={() => navigation.navigate('UserMeal')}>Meal</Text>
-      </View>
-      <View style={{margin: 10}}>
-        <Text onPress={() => navigation.navigate('UserGuest')}>Guest</Text>
-      </View>
-    </View>
+    <UserBottomTabs />
   );
 };
 const styles = StyleSheet.create({

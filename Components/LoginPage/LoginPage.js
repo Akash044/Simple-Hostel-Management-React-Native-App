@@ -1,19 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import {GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
+import { userContext } from '../../App';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const LoginPage = ({navigation}) => {
   const [isUser, setIsUser] = useState(true);
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
+  const [loggedUser, setLoggedUser] = useContext(userContext);
 
   useEffect(() => {
     GoogleSignin.configure({
       scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-      webClientId:
-        '522802067123-fsqon54096gp8rv6ofhbqv7o249ar97i.apps.googleusercontent.com',
+      webClientId:'522802067123-fsqon54096gp8rv6ofhbqv7o249ar97i.apps.googleusercontent.com',
       offlineAccess: true, 
       forceCodeForRefreshToken: true,
       
@@ -28,23 +28,36 @@ const LoginPage = ({navigation}) => {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       // this.setState({userInfo});
-      console.log(userInfo.user.id);
-      userInfo.user.id && navigation.push("User");
+      console.log(userInfo.user);
+      setLoggedUser({
+        email : userInfo.user.email,
+        id : userInfo.user.id,
+        name : userInfo.user.familyName,
+        photoUrl : userInfo.user.photo,
+        isAdmin : false
+      })
+      console.log(loggedUser);
+      // isAdmin(userInfo.user.email);
+      // userInfo.user.id && navigation.push("User");
     } catch (error) {
       console.log({error});
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-      } else {
-        // some other error happened
-      }
     }
   };
 
-  // Handle user state changes
+  const isAdmin = (email) => {
+    fetch(`http://192.168.0.107:8080/admin?email=${email}`)
+    .then(res => res.json())
+    .then(data => {
+      console.log(loggedUser);
+      if(data) {
+        setLoggedUser({...loggedUser, isAdmin:true});
+        navigation.push("Admin");
+    }else{
+      navigation.push("User");
+    }
+
+    })
+  }
 
   return (
     <View style={styles.container}>
