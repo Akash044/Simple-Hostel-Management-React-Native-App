@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Button, StyleSheet, Text, TextInput, View, ActivityIndicator} from 'react-native';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import {GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
@@ -7,7 +7,8 @@ import { userContext } from '../../App';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const LoginPage = ({navigation}) => {
-  const [isUser, setIsUser] = useState(true);
+
+  const [isDone, setIsDone] = useState(true);
   const [loggedUser, setLoggedUser] = useContext(userContext);
 
   useEffect(() => {
@@ -20,52 +21,76 @@ const LoginPage = ({navigation}) => {
     });
   }, []);
 
-  const handleIsUser = value => {
-    setIsUser(value);
-  };
+ 
   const handleGoogleSingIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       // this.setState({userInfo});
       console.log(userInfo.user);
-      setLoggedUser({
-        email : userInfo.user.email,
-        id : userInfo.user.id,
-        name : userInfo.user.familyName,
-        photoUrl : userInfo.user.photo,
-        isAdmin : false
-      })
-      console.log(loggedUser);
-      // isAdmin(userInfo.user.email);
-      // userInfo.user.id && navigation.push("User");
+      
+      console.log("39",loggedUser);
+      
+      isAdminHandle(userInfo);
+      // userInfo.user.id && navigation.push("Admin");
     } catch (error) {
       console.log({error});
     }
   };
-
-  const isAdmin = (email) => {
-    fetch(`http://192.168.0.107:8080/admin?email=${email}`)
+  // ${userInfo.user.email}
+  const isAdminHandle = (userInfo) => {
+    setIsDone(false);
+    fetch(`https://thawing-meadow-93763.herokuapp.com/isAdmin?email=akas076@gmail.com`)
     .then(res => res.json())
     .then(data => {
-      console.log(loggedUser);
+      console.log("52",loggedUser, data);
       if(data) {
-        setLoggedUser({...loggedUser, isAdmin:true});
-        navigation.push("Admin");
-    }else{
-      navigation.push("User");
-    }
+        setLoggedUser({
+          email : userInfo.user.email,
+          id : userInfo.user.id,
+          name : userInfo.user.name,
+          photoUrl : userInfo.user.photo,
+          isAdmin : true,
+          isUser:false,
+        });
+           
+      }else{
+        fetch(`https://thawing-meadow-93763.herokuapp.com/isUser?email=akas076@gmail.com`)
+       .then(res => res.json())
+       .then(data => {
+         console.log(data);
 
+        if(data){
+          setLoggedUser({
+            email : userInfo.user.email,
+            id : userInfo.user.id,
+            name : userInfo.user.name,
+            photoUrl : userInfo.user.photo,
+            isAdmin : false,
+            isUser : true,
+          })
+        }
+        else{
+          alert("You are not an user, please book room")
+          setLoggedUser({
+            email : userInfo.user.email,
+            id : userInfo.user.id,
+            name : userInfo.user.name,
+            photoUrl : userInfo.user.photo,
+            isAdmin : false,
+            isUser:false,
+          })}
+        })
+      }
+      setIsDone(true);
     })
   }
 
+  console.log("64",loggedUser);
+
   return (
     <View style={styles.container}>
-      {isUser ? (
-        <SignIn handleIsUser={handleIsUser} />
-      ) : (
-        <SignUp handleIsUser={handleIsUser} />
-      )}
+        <SignIn />
       <View>
         <Text style={{marginLeft: 80, margin: 10}}>Or....</Text>
         <GoogleSigninButton
@@ -74,7 +99,7 @@ const LoginPage = ({navigation}) => {
           color={GoogleSigninButton.Color.Dark}
           onPress={handleGoogleSingIn}
         />
-        {/* <Button title="Continue with Google" onPress={handleGoogleSingIn} /> */}
+        {!isDone && <ActivityIndicator  size="large" color="red"/>}
       </View>
     </View>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native"; 
 
 const HomePage = ({ navigation }) => {
   
@@ -16,7 +16,7 @@ const HomePage = ({ navigation }) => {
           onPress={() => navigation.navigate("Login")}
         />
         <Text style={styles.containerText}>
-          Want room? please search..
+          You are not a boarder? please book a room
         </Text>
         <Button
           title="Search"

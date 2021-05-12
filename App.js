@@ -30,20 +30,25 @@ const App = () => {
       <SafeAreaProvider>
         <NavigationContainer>
           <screenStack.Navigator initialRouteName="Home">
-            <screenStack.Screen name="Home" component={HomePage} />
-            <screenStack.Screen name="Login" component={LoginPage} />
-            <screenStack.Screen name="SignUp" component={SignUp} />
-            <screenStack.Screen name="User" component={UserDashboard} />
-            {/* <screenStack.Screen name="UserMeal" component={UserMealStatus} />
-      <screenStack.Screen name="UserRent" component={UserRentStatus} />
-      <screenStack.Screen name="UserProfile" component={UserProfile} />
-      <screenStack.Screen name="UserGuest" component={UserGuest} /> */}
-            <screenStack.Screen name="Admin" component={AdminDashBoard} />
-            <screenStack.Screen name="Search" component={SearchResult} />
-            <screenStack.Screen name="MMeal" component={ManageMeal} />
-            <screenStack.Screen name="MRent" component={ManageRent} />
-            <screenStack.Screen name="MRoom" component={ManageRoom} />
-            <screenStack.Screen name="MBoarder" component={ManageBoarder} />
+            {/* <screenStack.Screen name="Admin" component={AdminDashBoard} />
+                <screenStack.Screen name="Home" component={HomePage} />
+                <screenStack.Screen name="Login" component={LoginPage} />
+                <screenStack.Screen name="SignUp" component={SignUp} />
+                <screenStack.Screen name="Search" component={SearchResult} />
+                <screenStack.Screen name="User" component={UserDashboard} /> */}
+
+            {loggedUser.isAdmin ? (
+              <screenStack.Screen name="Admin" component={AdminDashBoard} />
+            ) : loggedUser.isUser ? ( 
+              <screenStack.Screen name="User" component={UserDashboard} />
+            ) : (
+              <>
+                <screenStack.Screen name="Home" component={HomePage} />
+                <screenStack.Screen name="Login" component={LoginPage} />
+                <screenStack.Screen name="SignUp" component={SignUp} />
+                <screenStack.Screen name="Search" component={SearchResult} />
+              </>
+            )}
           </screenStack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
@@ -54,3 +59,17 @@ const App = () => {
 export default App;
 
 const styles = StyleSheet.create({});
+
+{
+  /* <screenStack.Screen name="MMeal" component={ManageMeal} />
+            <screenStack.Screen name="MRent" component={ManageRent} />
+            <screenStack.Screen name="MRoom" component={ManageRoom} />
+            <screenStack.Screen name="MBoarder" component={ManageBoarder} /> */
+}
+
+{
+  /* <screenStack.Screen name="UserMeal" component={UserMealStatus} />
+      <screenStack.Screen name="UserRent" component={UserRentStatus} />
+      <screenStack.Screen name="UserProfile" component={UserProfile} />
+      <screenStack.Screen name="UserGuest" component={UserGuest} /> */
+}

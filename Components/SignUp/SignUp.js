@@ -1,16 +1,32 @@
 import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 
-const SignUp = (props) => {
-  // console.log(props)
-    const [userInfo, setUserInfo] = useState({});
+const SignUp = ({route, navigation}) => {
+  console.log(route.params)
+  const {roomNo} = route.params;
+  const [newBoarderInfo, setNewBoarderInfo] = useState({});
+
   const handleInputField = (value) => {
-    setUserInfo({ ...userInfo, ...value });
-    console.log(userInfo)
+    setNewBoarderInfo({ ...newBoarderInfo, ...value ,roomNo: roomNo});
+    console.log(newBoarderInfo)
   };
-  return (
+
+  const handleRegisterBtn = () => {
+    fetch("https://thawing-meadow-93763.herokuapp.com/addBoarder",{
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(newBoarderInfo),
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+      data && alert("boarder info added successfully")
+    })
+  }
+
+  return (<View style={styles.container}>
       <View style={styles.inputContainer}>
-        <Text style={styles.containerText}>Sign up</Text>
+        <Text style={styles.containerText}>Register for room no: {roomNo}</Text>
         <TextInput
           style={{
             height: 40,
@@ -20,7 +36,7 @@ const SignUp = (props) => {
             borderRadius: 20,
             padding: 10,
           }}
-          onTextInput={(e) => handleInputField({ name: e.nativeEvent.text })}
+          onChangeText={(value)=> handleInputField({name:value})}
           placeholder="  Enter your Name"
         />
         <TextInput
@@ -32,8 +48,8 @@ const SignUp = (props) => {
             borderRadius: 20,
             padding: 10,
           }}
-          onTextInput={(e) => handleInputField({ email: e.nativeEvent.text })}
-          placeholder="  Enter your email"
+          onChangeText={(value)=> handleInputField({email:value})}
+          placeholder="  Enter email"
         />
         <TextInput
           style={{
@@ -44,26 +60,26 @@ const SignUp = (props) => {
             borderRadius: 20,
             padding: 10,
           }}
-          onTextInput={(e) =>
-            handleInputField({ password: e.nativeEvent.text })
-          }
+          onChangeText={(value)=> handleInputField({password:value})}
           placeholder="  Enter password"
         />
         <View style={{ width: "40%", marginLeft: 70 }}>
-          <Button title="Sing up"  />
+          <Button title="Register" onPress={handleRegisterBtn} />
         </View>
-        <Text style={{ margin: 10 }}>
-          Already have an account? 
-          <Text onPress={() => props.handleIsUser(true)} style={{ color: "blue",borderBottomColor:"blue",borderWidth:1 }}>
-            sign in
-          </Text>
-        </Text>
+       
+      </View>
       </View>
   );
 };
 const styles = StyleSheet.create({
+  container: {
+     flex:1,
+     justifyContent: "center",
+     alignItems: "center",
+  },
   containerText: {
     paddingBottom: 10,
+    fontSize:18
   },
   inputContainer: {
     width: "70%",

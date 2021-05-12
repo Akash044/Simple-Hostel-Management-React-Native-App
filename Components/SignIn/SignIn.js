@@ -3,7 +3,7 @@ import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 
 
 const SignIn = (props) => {
-  // console.log(props)
+  console.log(props)
   const [userInfo, setUserInfo] = useState({});
   const [isUser, setIsUser] = useState(true);
   const handleInputField = (value) => {
@@ -13,7 +13,7 @@ const SignIn = (props) => {
   
   const handleEmailPassSignIn = () => {
     
-    // navigation.navigate("User");
+    navigation.navigate("Admin");
   };
 
   return (
@@ -46,18 +46,9 @@ const SignIn = (props) => {
           }
           placeholder="  Enter password"
         />
-        <View style={{ width: "40%", marginLeft: 70 }}>
+        <View style={{flexDirection:"row",justifyContent:"center",marginTop:10}}>
           <Button title="Sing in" onPress={handleEmailPassSignIn} />
         </View>
-        <Text style={{ margin: 10 }}>
-          Create a new account?
-          <Text
-            onPress={() => props.handleIsUser(false)}
-            style={{ color: "blue",borderColor: "blue", borderWidth:5}}
-          >
-            sign up
-          </Text>
-        </Text>
       </View>  
     </View>
   );
@@ -67,7 +58,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   inputContainer: {
-    width: "70%",
+    width: "90%",
     borderWidth: 2,
     padding: 10,
     borderRadius: 10,
